@@ -1,185 +1,227 @@
+  ```
+  Usage: msconvert [options] [filemasks]
+  Convert mass spec data file formats.
 
-```
-Usage:
+  Return value: # of failed files.
 
-	To perform a search either:
-		1) java -jar MSFragger.jar <parameter file> <list of mzML/mzXML/MGF/RAW/.d files>
-		To generate default parameter files use --config flag. E.g. "java -jar MSFragger.jar --config"
-	Or:
-		2) java -jar MSFragger.jar <options> <list of mzML/mzXML/MGF/RAW/.d files>
+  Options:
+    -f [ --filelist ] arg              : specify text file containing filenames
+    -o [ --outdir ] arg (=.)           : set output directory ('-' for stdout) 
+                                       [.]
+    -c [ --config ] arg                : configuration file (optionName=value)
+    --outfile arg                      : Override the name of output file.
+    -e [ --ext ] arg                   : set extension for output files 
+                                       [mzML|mzXML|mgf|txt|mz5]
+    --mzML                             : write mzML format [default]
+    --mzXML                            : write mzXML format
+    --mz5                              : write mz5 format
+    --mgf                              : write Mascot generic format
+    --text                             : write ProteoWizard internal text format
+    --ms1                              : write MS1 format
+    --cms1                             : write CMS1 format
+    --ms2                              : write MS2 format
+    --cms2                             : write CMS2 format
+    -v [ --verbose ]                   : display detailed progress information
+    --64                               : set default binary encoding to 64-bit 
+                                       precision [default]
+    --32                               : set default binary encoding to 32-bit
+                                     precision [default]
+    --32                               : set default binary encoding to 32-bit 
+                                       precision
+    --mz64                             : encode m/z values in 64-bit precision 
+                                       [default]
+    --mz32                             : encode m/z values in 32-bit precision
+    --inten64                          : encode intensity values in 64-bit 
+                                       precision
+    --inten32                          : encode intensity values in 32-bit 
+                                       precision [default]
+    --noindex                          : do not write index
+    -i [ --contactInfo ] arg           : filename for contact info
+    -z [ --zlib ]                      : use zlib compression for binary data
+    --numpressLinear [=arg(=2e-09)]    : use numpress linear prediction 
+                                       compression for binary mz and rt data 
+                                       (relative accuracy loss will not exceed 
+                                       given tolerance arg, unless set to 0)
+    --numpressLinearAbsTol [=arg(=-1)] : desired absolute tolerance for linear 
+                                       numpress prediction (e.g. use 1e-4 for a 
+                                       mass accuracy of 0.2 ppm at 500 m/z, 
+                                       default uses -1.0 for maximal accuracy). 
+                                       Note: setting this value may substantially
+                                       reduce file size, this overrides relative 
+                                       accuracy tolerance.
+    --numpressPic                      : use numpress positive integer 
+                                       compression for binary intensities 
+                                       (absolute accuracy loss will not exceed 
+                                       0.5)
+    --numpressSlof [=arg(=0.0002)]     : use numpress short logged float 
+                                       compression for binary intensities 
+                                       (relative accuracy loss will not exceed 
+                                       given tolerance arg, unless set to 0)
+    -n [ --numpressAll ]               : same as --numpressLinear --numpressSlof 
+                                       (see https://github.com/fickludd/ms-numpre
+                                       ss for more info)
+    -g [ --gzip ]                      : gzip entire output file (adds .gz to
+                                      filename)
+    --filter arg                       : add a spectrum list filter
+    --chromatogramFilter arg           : add a chromatogram list filter
+    --merge                            : create a single output file from 
+                                       multiple input files by merging file-level
+                                       metadata and concatenating spectrum lists
+    --runIndexSet arg                  : for multi-run sources, select only the 
+                                       specified run indices
+    --simAsSpectra                     : write selected ion monitoring as 
+                                       spectra, not chromatograms
+    --srmAsSpectra                     : write selected reaction monitoring as 
+                                       spectra, not chromatograms
+    --combineIonMobilitySpectra        : write all drift bins/scans in a 
+                                       frame/block as one spectrum instead of 
+                                       individual spectra
+    --acceptZeroLengthSpectra          : some vendor readers have an efficient 
+                                       way of filtering out empty spectra, but it
+                                       takes more time to open the file
+    --ignoreUnknownInstrumentError     : if true, if an instrument cannot be 
+                                       determined from a vendor file, it will not
+                                       be an error
+    --stripLocationFromSourceFiles     : if true, sourceFile elements will be 
+                                       stripped of location information, so the 
+                                       same file converted from different 
+                                       locations will produce the same mzML
+    --stripVersionFromSoftware         : if true, software elements will be 
+                                       stripped of version information, so the 
+                                       same file converted with different 
+                                       versions will produce the same mzML
+    --singleThreaded                   : if true, reading and writing spectra 
+                                       will be done on a single thread
+    --help                             : show this message, with extra detail on 
+                                       filter options
+                                    filter options
+    --help-filter arg                  : name of a single filter to get detailed 
+                                       help for
 
-Options:
+  FILTER OPTIONS
+  run this command with --help to see more detail
+  index <index_value_set>
+  id <id_set>
+  msLevel <mslevels>
+  chargeState <charge_states>
+  precursorRecalculation 
+  mzRefiner input1.pepXML input2.mzid [msLevels=<1->]
+  [thresholdScore=<CV_Score_Name>] [thresholdValue=<floatset>]
+  [thresholdStep=<float>] [maxSteps=<count>]
+  lockmassRefiner mz=<real> mzNegIons=<real (mz)> tol=<real (1.0 Daltons)>
+  precursorRefine 
+  peakPicking [<PickerType> [snr=<minimum signal-to-noise ratio>]
+  [peakSpace=<minimum peak spacing>] [msLevel=<ms_levels>]]
+  scanNumber <scan_numbers>
+  scanEvent <scan_event_set>
+  scanTime <scan_time_range>
+  sortByScanTime 
+  stripIT 
+  metadataFixer 
+  titleMaker <format_string>
+  threshold <type> <threshold> <orientation> [<mslevels>]
+  mzWindow <mzrange>
+  mzPrecursors <precursor_mz_list> [mzTol=<mzTol (10 ppm)>]
+  [target=<selected|isolated> (selected)] [mode=<include|exclude (include)>]
+  defaultArrayLength <peak_count_range>
+  zeroSamples <mode> [<MS_levels>]
+  mzPresent <mz_list> [mzTol=<tolerance> (0.5 mz)] [type=<type> (count)]
+  [threshold=<threshold> (10000)] [orientation=<orientation> (most-intense)]
+  [mode=<include|exclude (include)>]
+  scanSumming [precursorTol=<precursor tolerance>] [scanTimeTol=<scan time
+  tolerance in seconds>] [ionMobilityTol=<ion mobility tolerance>]
+  thermoScanFilter <exact|contains> <include|exclude> <match string>
+  MS2Denoise [<peaks_in_window> [<window_width_Da>
+  [multicharge_fragment_relaxation]]]
+  MS2Deisotope [hi_res [mzTol=<mzTol>]] [Poisson [minCharge=<minCharge>]
+  [maxCharge=<maxCharge>]]
+  ETDFilter [<removePrecursor> [<removeChargeReduced> [<removeNeutralLoss>
+  [<blanketRemoval> [<matchingTolerance> ]]]]]
+  demultiplex massError=<tolerance and units, eg 0.5Da (default 10ppm)>
+  nnlsMaxIter=<int (50)> nnlsEps=<real (1e-10)> noWeighting=<bool (false)>
+  demuxBlockExtra=<real (0)> variableFill=<bool (false)> noSumNormalize=<bool
+  (false)> optimization=<(none)|overlap_only> interpolateRT=<bool (true)>
+  minWindowSize=<real (0.2)>
+  chargeStatePredictor [overrideExistingCharge=<true|false (false)>]
+  [maxMultipleCharge=<int (3)>] [minMultipleCharge=<int (2)>]
+  [singleChargeFractionTIC=<real (0.9)>] [maxKnownCharge=<int (0)>]
+  [makeMS2=<true|false (false)>]
+  turbocharger [minCharge=<minCharge>] [maxCharge=<maxCharge>]
+  [precursorsBefore=<before>] [precursorsAfter=<after>] [halfIsoWidth=<half-width
+  of isolation window>] [defaultMinCharge=<defaultMinCharge>]
+  [defaultMaxCharge=<defaultMaxCharge>] [useVendorPeaks=<useVendorPeaks>]
+  activation <precursor_activation_type>
+  analyzer <analyzer>
+  analyzerType <analyzer>
+  polarity <polarity>
 
---num_threads <integer>                       # Number of CPU threads to use, should be set to the 
-                                              # number of logical processors; A value of 0 
-                                              # (auto-detect) will cause MSFragger to use the 
-                                              # auto-detected number of processors. Default: 0
---database_name <string>                      # Path to the protein database file in FASTA format.
---precursor_mass_lower <float>                # Lower bound of the precursor mass window. Default: -20
---precursor_mass_upper <float>                # Upper bound of the precursor mass window. Default: 20
---precursor_mass_units 0/1                    # Precursor mass tolerance units (0 for Da, 1 for ppm).
-                                              # Default: 1
---precursor_true_tolerance <float>            # True precursor mass tolerance (window is +/- this value).
-                                              # Used for tie breaker of results (in spectral ambiguous
-                                              # cases), zero bin boosting in open searches (0 disables
-                                              # these features), and mass calibration. This option is
-                                              # STRONGLY recommended for open searches. Default: 20
---precursor_true_units 0/1                    # True precursor mass tolerance units (0 for Da, 1 for ppm).
-                                              # Default: 1
---fragment_mass_tolerance <float>             # Fragment mass tolerance (window is +/- this value).
-                                              # Default: 20
---fragment_mass_units 0/1                     # Fragment mass tolerance units (0 for Da, 1 for ppm).
-                                              # Default: 1
---calibrate_mass 0/1/2                        # Perform mass calibration (0 for OFF, 1 for ON, 2 for ON
-                                              # and find optimal parameters). Default: 2 
---write_calibrated_mgf 0/1                    # Write calibrated MS2 scan to a MGF file (0 for No, 1 for Yes).
-                                              # Default: 1
---decoy_prefix <string>                       # Prefix added to the decoy protein ID. Default: <blank>
---isotope_error <string>                      # Also search for MS/MS events triggered on specified isotopic
-                                              # peaks. Default: 0
---mass_offsets <string>                       # Creates multiple precursor tolerance windows with
-                                              # specified mass offsets. These values are multiplexed
-                                              # with the isotope error option. For example,
-                                              # mass_offsets = 0/79.966 can be used as a restricted
-                                              # 'open' search that looks for unmodified and phosphorylated
-                                              # peptides. Setting isotope_error to 0/1/2 in combination
-                                              # with this example will create search windows around
-                                              # (0, 1, 2, 79.966, 80.966, 81.966). Default: 0
---precursor_mass_mode <string>                # One of isolated/selected/recalculated. Isolated uses 
-                                              # the isolation m/z, selected uses the selected m/z, 
-                                              # while recalculated uses a recalculated m/z from .ma 
-                                              # files within the same directory. If the desired m/z 
-                                              # type is not present for a scan, it will default to 
-                                              # whatever m/z is available. Default: selected
---localize_delta_mass 0/1                     # Include fragment ions mass-shifted by unknown
-                                              # modifications (recommended for open and mass offset 
-                                              # searches). Default: 0
---delta_mass_exclude_ranges <string>          # Exclude mass range for searching with delta mass to remove
-                                              # double counting of fragments in chimeric spectra and
-                                              # instances of monoisotopic error. Default: \(-1.5,3.5\)
---fragment_ion_series <string>                # Ion series used in search, specify any of a,b,c,x,y,z
-                                              # (comma separated). Default: b,y
---search_enzyme_name <string>                 # Name of enzyme to be written to the pepXML file. 
-                                              # Default: Trypsin
---search_enzyme_cutafter <string>             # Residues after which the enzyme cuts (specified as
-                                              # a string of amino acids). Default: KR
---search_enzyme_butnotafter <string>          # Residues that the enzyme will not cut before (misnomer:
-                                              # should really be called butnotbefore). Default: <blank> 
---num_enzyme_termini 0/1/2                    # Number of enzyme termini (0 for non-enzymatic, 1 for
-                                              # semi-enzymatic, and 2 for fully-enzymatic). Default: 2
---allowed_missed_cleavage <integer>           # Allowed number of missed cleavages per peptide. Maximum
-                                              # value is 5. Default: 1
---clip_nTerm_M 0/1                            # Specifies the trimming of a protein N-terminal methionine
-                                              # as a variable modification (0 or 1) Default: 1
---variable_mod_01 <string>                    # Set variable modifications. Check the document for
-                                              # detail. Replacing all spaces with _. Default: 15.99490_M_3
---variable_mod_02 <string>                    # Set variable modifications. Check the document for detail. 
-                                              # Replacing all spaces with _. Default: 42.01060_[^_1
---variable_mod_03 <string>                    # Set variable modifications. Check the document for detail. 
-                                              # Replacing all spaces with _. Default: <blank>
---variable_mod_04 <string>                    # Set variable modifications. Check the document for detail. 
-                                              # Replacing all spaces with _. Default: <blank>
---variable_mod_05 <string>                    # Set variable modifications. Check the document for detail. 
-                                              # Replacing all spaces with _. Default: <blank>
---variable_mod_06 <string>                    # Set variable modifications. Check the document for detail. 
-                                              # Replacing all spaces with _. Default: <blank>
---variable_mod_07 <string>                    # Set variable modifications. Check the document for detail. 
-                                              # Replacing all spaces with _. Default: <blank>
---allow_multiple_variable_mods_on_residue 0/1 # Allow each residue to be modified by multiple variable
-                                              # modifications (0 or 1). Default: 0
---max_variable_mods_per_peptide <integer>     # Maximum total number of variable modifications per peptide. 
-                                              # Default: 3
---max_variable_mods_combinations <integer>    # Maximum number of modified forms allowed for each peptide
-                                              # (up to 65534). Default: 5000.
---output_file_extension <string>              # File extension of output files. Default: pepXML
---output_format pepXML/tsv                    # File format of output files (pepXML or tsv). 
-                                              # Default: pepXML
---output_report_topN <integer>                # Reports top N PSMs per input spectrum. Default: 1
---output_max_expect <float>                   # Suppresses reporting of PSM if top hit has expectation value
-                                              # greater than this threshold. Default: 50.0
---report_alternative_proteins 0/1             # Report alternative proteins for peptides that are found 
-                                              # in multiple proteins. 0=no, 1=yes. Default: 0
---precursor_charge <string>                   # Assumed range of potential precursor charge states. Only
-                                              # relevant when override_charge is set to 1. Default: 1_4
---override_charge 0/1                         # Ignores precursor charge and uses charge state specified 
-                                              # in precursor_charge range (0 or 1). Default: 0
---digest_min_length <integer>                 # Minimum length of peptides to be generated during 
-                                              # in-silico digestion. Default: 7
---digest_max_length <integer>                 # Maximum length of peptides to be generated during 
-                                              # in-silico digestion. Default: 50
---digest_mass_range <string>                  # Mass range of peptides to be generated during in-silico
-                                              # digestion in Daltons (specified as a space separated 
-                                              # range). Default: 500.0_5000.0
---max_fragment_charge <integer>               # Maximum charge state for theoretical fragments to match 
-                                              # (1-4). Default: 2
---excluded_scan_list_file <string>            # Text file containing a list of scan names to be ignored
-                                              # in the search. Default: <blank>
---track_zero_topN <integer>                   # Track top N unmodified peptide results separately from 
-                                              # main results internally for boosting features. Should 
-                                              # be set to a number greater than output_report_topN if 
-                                              # zero bin boosting is desired. Default: 0
---zero_bin_accept_expect <float>              # Ranks a zero-bin hit above all non-zero-bin hit if it 
-                                              # has expectation less than this value. Default: 0.0
---zero_bin_mult_expect <float>                # Multiplies expect value of PSMs in the zero-bin during 
-                                              # results ordering (set to less than 1 for boosting). 
-                                              # Default: 1.0
---add_topN_complementary <integer>            # Inserts complementary ions corresponding to the top N 
-                                              # most intense fragments in each experimental spectra. 
-                                              # Useful for recovery of modified peptides near C-terminal 
-                                              # in open search. Should be set to 0 (disabled) otherwise. 
-                                              # Default: 0
---minimum_peaks <integer>                     # Minimum number of peaks in experimental spectrum for 
-                                              # matching. Default: 15
---use_topN_peaks <integer>                    # Pre-process experimental spectrum to only use top N 
-                                              # peaks. Default: 150
---deisotope <integer>                         # Perform deisotoping or not (0=no, 1=yes). Default: 0 
---min_fragments_modelling <integer>           # Minimum number of matched peaks in PSM for inclusion in 
-                                              # statistical modeling. Default: 2
---min_matched_fragments <integer>             # Minimum number of matched peaks for PSM to be reported. 
-                                              # Default: 4
---minimum_ratio <float>                       # Filters out all peaks in experimental spectrum less 
-                                              # intense than this multiple of the base peak intensity. 
-                                              # Default: 0.01
---clear_mz_range <string>                     # Removes peaks in this m/z range prior to matching. 
-                                              # Useful for iTRAQ/TMT experiments (i.e. 0.0 150.0). 
-                                              # Default: 0.0_0.0
---remove_precursor_peak 0/1/2                 # Remove precursor peaks from tandem mass spectra.
-                                              # 0 = not remove; 1 = remove the peak with precursor charge;
-                                              # 2 = remove the peaks with all charge states. Default: 0
---remove_precursor_range <string>             # m/z range in removing precursor peaks. Unit: Da.
-                                              # Default: -1.5,1.5
---intensity_transform 0/1                     # Transform peaks intensities with sqrt root.
-                                              # 0 = not transform; 1 = transform using sqrt root.
-                                              # Default: 0
---add_Cterm_peptide <float>                   # Statically add mass to C-terminal of peptide. Default: 0.0
---add_Nterm_peptide <float>                   # Statically add mass to N-terminal of peptide. Default: 0.0
---add_Cterm_protein <float>                   # Statically add mass to C-terminal of protein. Default: 0.0
---add_Nterm_protein <float>                   # Statically add mass to N-terminal of protein. Default: 0.0
---add_G_glycine <float>                       # Statically add mass to glycine. Default: 0.0
---add_A_alanine <float>                       # Statically add mass to alanine. Default: 0.0
---add_S_serine <float>                        # Statically add mass to serine. Default: 0.0
---add_P_proline <float>                       # Statically add mass to proline. Default: 0.0
---add_V_valine <float>                        # Statically add mass to valine. Default: 0.0
---add_T_threonine <float>                     # Statically add mass to threonine. Default: 0.0
---add_C_cysteine <float>                      # Statically add mass to cysteine. Default: 57.021464
---add_L_leucine <float>                       # Statically add mass to leucine. Default: 0.0
---add_I_isoleucine <float>                    # Statically add mass to isoleucine. Default: 0.0
---add_N_asparagine <float>                    # Statically add mass to asparagine. Default: 0.0
---add_D_aspartic_acid <float>                 # Statically add mass to aspartic acid. Default: 0.0
---add_Q_glutamine <float>                     # Statically add mass to glutamine. Default: 0.0
---add_K_lysine <float>                        # Statically add mass to lysine. Default: 0.0
---add_E_glutamic_acid <float>                 # Statically add mass to glutamic acid. Default: 0.0
---add_M_methionine <float>                    # Statically add mass to methionine. Default: 0.0
---add_H_histidine <float>                     # Statically add mass to histidine. Default: 0.0
---add_F_phenylalanine <float>                 # Statically add mass to phenylalanine. Default: 0.0
---add_R_arginine <float>                      # Statically add mass to arginine. Default: 0.0
---add_Y_tyrosine <float>                      # Statically add mass to tyrosine. Default: 0.0
---add_W_tryptophan <float>                    # Statically add mass to tryptophan. Default: 0.0
---add_B_user_amino_acid <float>               # Statically add mass to B. Default: 0.0
---add_J_user_amino_acid <float>               # Statically add mass to J. Default: 0.0
---add_O_user_amino_acid <float>               # Statically add mass to O. Default: 0.0
---add_U_user_amino_acid <float>               # Statically add mass to U. Default: 0.0
---add_X_user_amino_acid <float>               # Statically add mass to X. Default: 0.0
---add_Z_user_amino_acid <float>               # Statically add mass to Z. Default: 0.0
 
-```
+  Examples:
+
+  # convert data.RAW to data.mzML
+  msconvert data.RAW
+  # convert data.RAW to data.mzXML
+  msconvert data.RAW --mzXML
+
+  # put output file in my_output_dir
+  msconvert data.RAW -o my_output_dir
+
+  # combining options to create a smaller mzML file, much like the old ReAdW converter program
+  msconvert data.RAW --32 --zlib --filter "peakPicking true 1-" --filter "zeroSamples removeExtra"
+
+  # extract scan indices 5...10 and 20...25
+  msconvert data.RAW --filter "index [5,10] [20,25]"
+
+  # extract MS1 scans only
+  msconvert data.RAW --filter "msLevel 1"
+
+  # extract MS2 and MS3 scans only
+  msconvert data.RAW --filter "msLevel 2-3"
+
+  # extract MSn scans for n>1
+  msconvert data.RAW --filter "msLevel 2-"
+
+  # apply ETD precursor mass filter
+  msconvert data.RAW --filter ETDFilter
+
+  # remove non-flanking zero value samples
+  msconvert data.RAW --filter "zeroSamples removeExtra"
+
+  # remove non-flanking zero value samples in MS2 and MS3 only
+  msconvert data.RAW --filter "zeroSamples removeExtra 2 3"
+
+  # add missing zero value samples (with 5 flanking zeros) in MS2 and MS3 only
+  msconvert data.RAW --filter "zeroSamples addMissing=5 2 3"
+
+  # keep only HCD spectra from a decision tree data file
+  msconvert data.RAW --filter "activation HCD"
+
+  # keep the top 42 peaks or samples (depending on whether spectra are centroid or profile):
+  msconvert data.RAW --filter "threshold count 42 most-intense"
+
+  # multiple filters: select scan numbers and recalculate precursors
+  msconvert data.RAW --filter "scanNumber [500,1000]" --filter "precursorRecalculation"
+
+  # multiple filters: apply peak picking and then keep the bottom 100 peaks:
+  msconvert data.RAW --filter "peakPicking true 1-" --filter "threshold count 100 least-intense"
+
+  # multiple filters: apply peak picking and then keep all peaks that are at least 50% of the intensity of the base peak:
+  msconvert data.RAW --filter "peakPicking true 1-" --filter "threshold bpi-relative .5 most-intense"
+
+  # use a configuration file
+  msconvert data.RAW -c config.txt
+
+  # example configuration file
+  mzXML=true
+  zlib=true
+  filter="index [3,7]"
+  filter="precursorRecalculation"
+
+
+  Questions, comments, and bug reports:
+  https://github.com/ProteoWizard
+  support@proteowizard.org
+
+  ProteoWizard release: 3.0.20066 (729ef9c41)
+  Build date: Mar  6 2020 23:32:05
+  ```
