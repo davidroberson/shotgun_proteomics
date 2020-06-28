@@ -1,6 +1,234 @@
 class: CommandLineTool
 cwlVersion: v1.0
 label: msconvert
+doc: |-
+  ```
+  Usage: msconvert [options] [filemasks]
+  Convert mass spec data file formats.
+
+  Return value: # of failed files.
+
+  Options:
+    -f [ --filelist ] arg              : specify text file containing filenames
+    -o [ --outdir ] arg (=.)           : set output directory ('-' for stdout) 
+                                       [.]
+    -c [ --config ] arg                : configuration file (optionName=value)
+    --outfile arg                      : Override the name of output file.
+    -e [ --ext ] arg                   : set extension for output files 
+                                       [mzML|mzXML|mgf|txt|mz5]
+    --mzML                             : write mzML format [default]
+    --mzXML                            : write mzXML format
+    --mz5                              : write mz5 format
+    --mgf                              : write Mascot generic format
+    --text                             : write ProteoWizard internal text format
+    --ms1                              : write MS1 format
+    --cms1                             : write CMS1 format
+    --ms2                              : write MS2 format
+    --cms2                             : write CMS2 format
+    -v [ --verbose ]                   : display detailed progress information
+    --64                               : set default binary encoding to 64-bit 
+                                       precision [default]
+    --32                               : set default binary encoding to 32-bit
+                                     precision [default]
+    --32                               : set default binary encoding to 32-bit 
+                                       precision
+    --mz64                             : encode m/z values in 64-bit precision 
+                                       [default]
+    --mz32                             : encode m/z values in 32-bit precision
+    --inten64                          : encode intensity values in 64-bit 
+                                       precision
+    --inten32                          : encode intensity values in 32-bit 
+                                       precision [default]
+    --noindex                          : do not write index
+    -i [ --contactInfo ] arg           : filename for contact info
+    -z [ --zlib ]                      : use zlib compression for binary data
+    --numpressLinear [=arg(=2e-09)]    : use numpress linear prediction 
+                                       compression for binary mz and rt data 
+                                       (relative accuracy loss will not exceed 
+                                       given tolerance arg, unless set to 0)
+    --numpressLinearAbsTol [=arg(=-1)] : desired absolute tolerance for linear 
+                                       numpress prediction (e.g. use 1e-4 for a 
+                                       mass accuracy of 0.2 ppm at 500 m/z, 
+                                       default uses -1.0 for maximal accuracy). 
+                                       Note: setting this value may substantially
+                                       reduce file size, this overrides relative 
+                                       accuracy tolerance.
+    --numpressPic                      : use numpress positive integer 
+                                       compression for binary intensities 
+                                       (absolute accuracy loss will not exceed 
+                                       0.5)
+    --numpressSlof [=arg(=0.0002)]     : use numpress short logged float 
+                                       compression for binary intensities 
+                                       (relative accuracy loss will not exceed 
+                                       given tolerance arg, unless set to 0)
+    -n [ --numpressAll ]               : same as --numpressLinear --numpressSlof 
+                                       (see https://github.com/fickludd/ms-numpre
+                                       ss for more info)
+    -g [ --gzip ]                      : gzip entire output file (adds .gz to
+                                      filename)
+    --filter arg                       : add a spectrum list filter
+    --chromatogramFilter arg           : add a chromatogram list filter
+    --merge                            : create a single output file from 
+                                       multiple input files by merging file-level
+                                       metadata and concatenating spectrum lists
+    --runIndexSet arg                  : for multi-run sources, select only the 
+                                       specified run indices
+    --simAsSpectra                     : write selected ion monitoring as 
+                                       spectra, not chromatograms
+    --srmAsSpectra                     : write selected reaction monitoring as 
+                                       spectra, not chromatograms
+    --combineIonMobilitySpectra        : write all drift bins/scans in a 
+                                       frame/block as one spectrum instead of 
+                                       individual spectra
+    --acceptZeroLengthSpectra          : some vendor readers have an efficient 
+                                       way of filtering out empty spectra, but it
+                                       takes more time to open the file
+    --ignoreUnknownInstrumentError     : if true, if an instrument cannot be 
+                                       determined from a vendor file, it will not
+                                       be an error
+    --stripLocationFromSourceFiles     : if true, sourceFile elements will be 
+                                       stripped of location information, so the 
+                                       same file converted from different 
+                                       locations will produce the same mzML
+    --stripVersionFromSoftware         : if true, software elements will be 
+                                       stripped of version information, so the 
+                                       same file converted with different 
+                                       versions will produce the same mzML
+    --singleThreaded                   : if true, reading and writing spectra 
+                                       will be done on a single thread
+    --help                             : show this message, with extra detail on 
+                                       filter options
+                                    filter options
+    --help-filter arg                  : name of a single filter to get detailed 
+                                       help for
+
+  FILTER OPTIONS
+  run this command with --help to see more detail
+  index <index_value_set>
+  id <id_set>
+  msLevel <mslevels>
+  chargeState <charge_states>
+  precursorRecalculation 
+  mzRefiner input1.pepXML input2.mzid [msLevels=<1->]
+  [thresholdScore=<CV_Score_Name>] [thresholdValue=<floatset>]
+  [thresholdStep=<float>] [maxSteps=<count>]
+  lockmassRefiner mz=<real> mzNegIons=<real (mz)> tol=<real (1.0 Daltons)>
+  precursorRefine 
+  peakPicking [<PickerType> [snr=<minimum signal-to-noise ratio>]
+  [peakSpace=<minimum peak spacing>] [msLevel=<ms_levels>]]
+  scanNumber <scan_numbers>
+  scanEvent <scan_event_set>
+  scanTime <scan_time_range>
+  sortByScanTime 
+  stripIT 
+  metadataFixer 
+  titleMaker <format_string>
+  threshold <type> <threshold> <orientation> [<mslevels>]
+  mzWindow <mzrange>
+  mzPrecursors <precursor_mz_list> [mzTol=<mzTol (10 ppm)>]
+  [target=<selected|isolated> (selected)] [mode=<include|exclude (include)>]
+  defaultArrayLength <peak_count_range>
+  zeroSamples <mode> [<MS_levels>]
+  mzPresent <mz_list> [mzTol=<tolerance> (0.5 mz)] [type=<type> (count)]
+  [threshold=<threshold> (10000)] [orientation=<orientation> (most-intense)]
+  [mode=<include|exclude (include)>]
+  scanSumming [precursorTol=<precursor tolerance>] [scanTimeTol=<scan time
+  tolerance in seconds>] [ionMobilityTol=<ion mobility tolerance>]
+  thermoScanFilter <exact|contains> <include|exclude> <match string>
+  MS2Denoise [<peaks_in_window> [<window_width_Da>
+  [multicharge_fragment_relaxation]]]
+  MS2Deisotope [hi_res [mzTol=<mzTol>]] [Poisson [minCharge=<minCharge>]
+  [maxCharge=<maxCharge>]]
+  ETDFilter [<removePrecursor> [<removeChargeReduced> [<removeNeutralLoss>
+  [<blanketRemoval> [<matchingTolerance> ]]]]]
+  demultiplex massError=<tolerance and units, eg 0.5Da (default 10ppm)>
+  nnlsMaxIter=<int (50)> nnlsEps=<real (1e-10)> noWeighting=<bool (false)>
+  demuxBlockExtra=<real (0)> variableFill=<bool (false)> noSumNormalize=<bool
+  (false)> optimization=<(none)|overlap_only> interpolateRT=<bool (true)>
+  minWindowSize=<real (0.2)>
+  chargeStatePredictor [overrideExistingCharge=<true|false (false)>]
+  [maxMultipleCharge=<int (3)>] [minMultipleCharge=<int (2)>]
+  [singleChargeFractionTIC=<real (0.9)>] [maxKnownCharge=<int (0)>]
+  [makeMS2=<true|false (false)>]
+  turbocharger [minCharge=<minCharge>] [maxCharge=<maxCharge>]
+  [precursorsBefore=<before>] [precursorsAfter=<after>] [halfIsoWidth=<half-width
+  of isolation window>] [defaultMinCharge=<defaultMinCharge>]
+  [defaultMaxCharge=<defaultMaxCharge>] [useVendorPeaks=<useVendorPeaks>]
+  activation <precursor_activation_type>
+  analyzer <analyzer>
+  analyzerType <analyzer>
+  polarity <polarity>
+
+
+  Examples:
+
+  # convert data.RAW to data.mzML
+  msconvert data.RAW
+  # convert data.RAW to data.mzXML
+  msconvert data.RAW --mzXML
+
+  # put output file in my_output_dir
+  msconvert data.RAW -o my_output_dir
+
+  # combining options to create a smaller mzML file, much like the old ReAdW converter program
+  msconvert data.RAW --32 --zlib --filter "peakPicking true 1-" --filter "zeroSamples removeExtra"
+
+  # extract scan indices 5...10 and 20...25
+  msconvert data.RAW --filter "index [5,10] [20,25]"
+
+  # extract MS1 scans only
+  msconvert data.RAW --filter "msLevel 1"
+
+  # extract MS2 and MS3 scans only
+  msconvert data.RAW --filter "msLevel 2-3"
+
+  # extract MSn scans for n>1
+  msconvert data.RAW --filter "msLevel 2-"
+
+  # apply ETD precursor mass filter
+  msconvert data.RAW --filter ETDFilter
+
+  # remove non-flanking zero value samples
+  msconvert data.RAW --filter "zeroSamples removeExtra"
+
+  # remove non-flanking zero value samples in MS2 and MS3 only
+  msconvert data.RAW --filter "zeroSamples removeExtra 2 3"
+
+  # add missing zero value samples (with 5 flanking zeros) in MS2 and MS3 only
+  msconvert data.RAW --filter "zeroSamples addMissing=5 2 3"
+
+  # keep only HCD spectra from a decision tree data file
+  msconvert data.RAW --filter "activation HCD"
+
+  # keep the top 42 peaks or samples (depending on whether spectra are centroid or profile):
+  msconvert data.RAW --filter "threshold count 42 most-intense"
+
+  # multiple filters: select scan numbers and recalculate precursors
+  msconvert data.RAW --filter "scanNumber [500,1000]" --filter "precursorRecalculation"
+
+  # multiple filters: apply peak picking and then keep the bottom 100 peaks:
+  msconvert data.RAW --filter "peakPicking true 1-" --filter "threshold count 100 least-intense"
+
+  # multiple filters: apply peak picking and then keep all peaks that are at least 50% of the intensity of the base peak:
+  msconvert data.RAW --filter "peakPicking true 1-" --filter "threshold bpi-relative .5 most-intense"
+
+  # use a configuration file
+  msconvert data.RAW -c config.txt
+
+  # example configuration file
+  mzXML=true
+  zlib=true
+  filter="index [3,7]"
+  filter="precursorRecalculation"
+
+
+  Questions, comments, and bug reports:
+  https://github.com/ProteoWizard
+  support@proteowizard.org
+
+  ProteoWizard release: 3.0.20066 (729ef9c41)
+  Build date: Mar  6 2020 23:32:05
+  ```
 $namespaces:
   sbg: https://sevenbridges.com
 
@@ -88,14 +316,82 @@ stdout: std.out
 
 baseCommand:
 - wine msconvert --mzML --64 --mz64 --inten64 --filter "peakPicking true 1-"
-id: david.roberson/philosopher-dev/msconvert/12
+id: |-
+  https://cgc-api.sbgenomics.com/v2/apps/david.roberson/philosopher-dev/msconvert/13/raw/
 sbg:appVersion:
 - v1.0
-sbg:content_hash: aa2a531d96d309831381da7b8ccc2a5b0f775111dfa7a92192d8c727132bc723d
+sbg:content_hash: a0b970f49d1a4ccf5892dbe5e77caa82a9ca0a161df5556427ef347af1407d3bc
 sbg:contributors:
 - david.roberson
 - prvst
 sbg:createdBy: david.roberson
 sbg:createdOn: 1588617862
+sbg:id: david.roberson/philosopher-dev/msconvert/13
+sbg:image_url:
+sbg:latestRevision: 13
+sbg:modifiedBy: david.roberson
+sbg:modifiedOn: 1593364341
+sbg:project: david.roberson/philosopher-dev
+sbg:projectName: michigan-pipeline
+sbg:publisher: sbg
+sbg:revision: 13
+sbg:revisionNotes: added help text from terminal
+sbg:revisionsInfo:
+- sbg:modifiedBy: david.roberson
+  sbg:modifiedOn: 1588617862
+  sbg:revision: 0
+  sbg:revisionNotes: Copy of david.roberson/philosopher-test/msconvert/8
+- sbg:modifiedBy: david.roberson
+  sbg:modifiedOn: 1588618099
+  sbg:revision: 1
+  sbg:revisionNotes: ''
+- sbg:modifiedBy: david.roberson
+  sbg:modifiedOn: 1588618123
+  sbg:revision: 2
+  sbg:revisionNotes: ''
+- sbg:modifiedBy: david.roberson
+  sbg:modifiedOn: 1588618755
+  sbg:revision: 3
+  sbg:revisionNotes: reduced ram to 4gb
+- sbg:modifiedBy: david.roberson
+  sbg:modifiedOn: 1588642187
+  sbg:revision: 4
+  sbg:revisionNotes: --mzML --64 --mz64 --inten64 "peakPicking true 1-"
+- sbg:modifiedBy: prvst
+  sbg:modifiedOn: 1588687584
+  sbg:revision: 5
+  sbg:revisionNotes: fixing the peakpicking parameter
+- sbg:modifiedBy: david.roberson
+  sbg:modifiedOn: 1589834605
+  sbg:revision: 6
+  sbg:revisionNotes: directory is input
+- sbg:modifiedBy: david.roberson
+  sbg:modifiedOn: 1589835395
+  sbg:revision: 7
+  sbg:revisionNotes: ''
+- sbg:modifiedBy: david.roberson
+  sbg:modifiedOn: 1590038127
+  sbg:revision: 8
+  sbg:revisionNotes: ''
+- sbg:modifiedBy: david.roberson
+  sbg:modifiedOn: 1590930682
+  sbg:revision: 9
+  sbg:revisionNotes: ''
+- sbg:modifiedBy: david.roberson
+  sbg:modifiedOn: 1590930765
+  sbg:revision: 10
+  sbg:revisionNotes: ''
+- sbg:modifiedBy: david.roberson
+  sbg:modifiedOn: 1590931262
+  sbg:revision: 11
+  sbg:revisionNotes: ''
+- sbg:modifiedBy: david.roberson
+  sbg:modifiedOn: 1590932322
+  sbg:revision: 12
+  sbg:revisionNotes: revert
+- sbg:modifiedBy: david.roberson
+  sbg:modifiedOn: 1593364341
+  sbg:revision: 13
+  sbg:revisionNotes: added help text from terminal
 sbg:sbgMaintained: false
 sbg:validationErrors: []
