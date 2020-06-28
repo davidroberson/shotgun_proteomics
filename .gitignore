@@ -50,6 +50,14 @@ coverage.xml
 *.mo
 *.pot
 
+.profile
+.gitconfig
+.bashrc
+.bash_logout
+*.jupyter*
+.config
+.local.*
+
 # Django stuff:
 *.log
 local_settings.py
