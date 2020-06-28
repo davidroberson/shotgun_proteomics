@@ -56,7 +56,7 @@ coverage.xml
 .bash_logout
 *.jupyter*
 .config
-.local.*
+.local*
 
 # Django stuff:
 *.log
