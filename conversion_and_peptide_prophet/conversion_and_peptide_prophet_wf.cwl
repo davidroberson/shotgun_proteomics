@@ -31,7 +31,7 @@ outputs:
 - id: peptide_prophet_folder_archive
   type: File?
   outputSource:
-  - peptide_prophet/peptide_prophet_folder_archive
+  - philosopher_peptideprophet/peptide_prophet_folder_archive
   sbg:x: 892.703125
   sbg:y: 35.5
 
@@ -86,7 +86,7 @@ steps:
     source: database_name
   - id: workspace_in
     source: philosopher_workspace/workspace
-  run: ../tools/database.cwl
+  run: ../tools/database/database.cwl
   out:
   - id: output
   - id: workspace
@@ -105,7 +105,7 @@ steps:
     - msconvert/mzML
   - id: workspace_in
     source: 
-    - database/workspace
+    - philosopher_database/workspace
   run: ../tools/peptide-prophet/peptide_prophet.cwl
   out:
   - id: peptide_prophet_log
